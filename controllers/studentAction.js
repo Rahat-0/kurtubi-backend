@@ -3,41 +3,6 @@ const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 exports.studentAction = {
 
-
-  // login handler
-  studentLogin(req, res, next) {
-    const { student_id, password } = req.body;
-    if (!student_id || !password) {
-      return res.json({ error: "student_id and password required!!" })
-    }
-    const pass = password;
-    const queryString = `SELECT * FROM students WHERE student_id = ${student_id} `
-    db.execute(queryString, (err, result) => {
-      if (err) {
-        return res.json({ error: err.message })
-      }
-      let finalExecution = async () => {
-        try {
-          const { student_id, dob, password, first_name } = result[0]
-          const check = await bcrypt.compare(pass, password)
-
-          if (check) {
-            const token = jwt.sign({ student_id, dob, first_name }, process.env.JWTSECRET)
-            res.setHeader('token', "bearer " + token)
-            res.json({ success: "login success!! " })
-          } else {
-            return res.json({ error: "student_id or password incorrect!!" })
-          }
-
-        } catch (error) {
-          next(error)
-        }
-
-      }
-      finalExecution()
-    })
-  },
-
   // get all student handler
   allstudent(req, res, next) {
     const queryString = `select * from students`;

@@ -1,15 +1,11 @@
-const resultAction = require('../actions/resultAction');
-const { studentAction } = require('../actions/studentAction');
+const resultAction = require('../controllers/resultAction');
+const { studentAction } = require('../controllers/studentAction');
 const studentAuth = require('../middlewares/studentAuth');
 const studentValidation = require('../middlewares/studentValidation')
 const imageUpload = require('../middlewares/imageUpload')
 const studentapi = require('express').Router()
 
 //root route--> api/student/...
-
-// public routes
-// default password --> 123456
-studentapi.post('/login', studentAction.studentLogin )
 
 // protected routes
 // student profile routes

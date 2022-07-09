@@ -4,9 +4,8 @@ const adminAuth = (req, res, next) =>{
         const {token} = req.headers;
         const exectToken = token.split(' ')[1]
         const data =  jwt.verify(exectToken, process.env.JWTSECRET)
-        const {admin_id, dob, admin_name} = data;
+        const {admin_id, admin_name} = data;
         req.admin_id = admin_id;
-        req.dob = dob;
         req.name = admin_name
 
         next()

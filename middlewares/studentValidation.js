@@ -1,7 +1,5 @@
-const fs = require('fs')
 const studentValidation = (req, res, next) => {
-    const { id, first_name, last_name, email, dob, phone, department, classes, gender, roll } = req.body;
-    const image = req.file ? req.file.filename : null
+    const { student_id, first_name, last_name, email, dob, phone, department, classes, gender, roll } = req.body;
     try {
          if (!first_name) {
             return res.json({ error: 'first name required!!' }) 
@@ -45,7 +43,7 @@ const studentValidation = (req, res, next) => {
             return res.json({ error: 'gender must be valid!!' })
         }
 
-        req.validation = { id, first_name, last_name, dob, email, phone, department, classes, gender, roll }
+        req.validation = { student_id, first_name, last_name, dob, email, phone, department, classes, gender, roll }
         next()
     } catch (error) {
         console.log(error)
