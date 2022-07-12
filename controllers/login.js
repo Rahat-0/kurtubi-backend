@@ -51,10 +51,10 @@ const login = async (req, res, next) => {
             }
 
             try {
-                const { teacher_id, dob, password, first_name, ispermit } = result[0]
+                const { teacher_id, subject, password, first_name, ispermit } = result[0]
                 const check = await bcrypt.compare(pass, password)
                 if (check) {
-                    const token = jwt.sign({ teacher_id, dob, first_name, ispermit }, process.env.JWTSECRET)
+                    const token = jwt.sign({ teacher_id, subject, first_name, ispermit }, process.env.JWTSECRET)
                     res.setHeader('token', "bearer " + token)
                     return res.json({ success: "login success!! " })
                 } else {

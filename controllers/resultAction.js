@@ -5,8 +5,7 @@ const resultAction = {
     resultAll(req, res, next) {
         const classes = req.params['classes']
         const semester = req.params['semester']
-
-        const queryString = `SELECT first_name, last_name, id, semester, subject_name, subject_result, subject_ranking FROM results NATURAL JOIN students WHERE results.semester  = ${semester} AND students.classes = ${classes}`
+        const queryString = `SELECT first_name, classes, last_name, student_id, semester, subject_name, subject_result, subject_ranking, teacher_id FROM results NATURAL JOIN students WHERE results.semester  = ${semester} AND students.classes = ${classes}`
         db.execute(queryString, (error, result) => {
             if (error) {
                 console.log(error.message)
@@ -20,8 +19,8 @@ const resultAction = {
 
 
     resultOneAll(req, res, next) {
-        const id = req.params['id']
-        const queryString = `SELECT * FROM results WHERE id = ${id} `
+        const student_id = req.params['id']
+        const queryString = `SELECT first_name, last_name, classes, student_id, semester, subject_name, subject_result, subject_ranking, teacher_id FROM results NATURAL JOIN students WHERE student_id = ${student_id} `
         db.execute(queryString, (error, result) => {
             if (error) {
                 console.log(error.message)
@@ -33,15 +32,28 @@ const resultAction = {
         })
     },
 
-
+// only teacher can insert data.
+// teacher must be permited for insert result.
+// teacher can add only his/har departmental subject.
     resultAdd(req, res, next) {
-        const { id, semester, subject_name, subject_result, subject_ranking } = req.body;
-        if (!id || !semester || !subject_name || !subject_result || !subject_ranking) {
+        const { student_id, semester, subject_name, subject_result, subject_ranking } = req.body;
+        const teacher_id = req.teacher_id;
+        const ispermit = req.ispermit;
+        const subject = req.subject;
+        console.log(subject, subject_name)
+        
+        if(!ispermit || ispermit == 0){
+            return res.json({error : "you are not eligible for add result!!"})
+        }
+
+        if (!student_id || !semester || !subject_name || !subject_result || !subject_ranking) {
             return res.json({ error: 'field should not be empty!!' })
         }
-        const queryString = `INSERT INTO results ( semester, id, subject_name, subject_result, subject_ranking )
-         VALUES(${semester}, ${id}, '${subject_name}', ${subject_result}, ${subject_ranking})`
-        db.execute(queryString, (error, result) => {
+        
+        if(ispermit == 1 && subject == subject_name){
+            const queryString = `INSERT INTO results ( semester, student_id, teacher_id, subject_name, subject_result, subject_ranking )
+         VALUES(${semester}, ${student_id}, ${teacher_id}, '${subject_name}', ${subject_result}, ${subject_ranking})`
+            db.execute(queryString, (error, result) => {
             if (error) {
                 console.log(error.message)
                 next(error)
@@ -50,15 +62,19 @@ const resultAction = {
             console.log(result)
             res.json({ result })
         })
+        }else{
+            return res.json({error : "unable to add another subject!!"})
+        }
+        
     },
 
 
     resultUpdate(req, res, next) {
-        const { id, semester, subject_name, subject_result, subject_ranking, updated_semester, updated_subject_name } = req.body;
-        if (!id || !semester || !subject_name || !subject_result || !subject_ranking) {
+        const { student_id, semester, subject_name, subject_result, subject_ranking, updated_semester, updated_subject_name } = req.body;
+        if (!student_id || !semester || !subject_name || !subject_result || !subject_ranking) {
             return res.json({ error: 'field should not be empty!!' })
         }
-        const queryString = `UPDATE results SET semester = ${updated_semester ? updated_semester : semester}, subject_ranking = ${subject_ranking}, subject_name = '${updated_subject_name ? updated_subject_name : subject_name}', subject_result = ${subject_result}  WHERE id = ${id} AND subject_name = '${subject_name}' AND semester = ${semester}`
+        const queryString = `UPDATE results SET semester = ${updated_semester ? updated_semester : semester}, subject_ranking = ${subject_ranking}, subject_name = '${updated_subject_name ? updated_subject_name : subject_name}', subject_result = ${subject_result}  WHERE student_id = ${student_id} AND subject_name = '${subject_name}' AND semester = ${semester}`
         db.execute(queryString, (error, result) => {
             if (error) {
                 console.log(error.message)
@@ -66,13 +82,13 @@ const resultAction = {
                 return;
             }
             console.log(result)
-            res.json({ result })
+            res.json({ result }) 
         })
     },
 
 
     resultDelete(req, res, next) {
-        const { id, semester, subject_name } = req.body;
+        const { student_id, semester, subject_name } = req.body;
         if (!id || !semester || !subject_name) {
             return res.json({ error: 'field should not be empty!!' })
         }

@@ -1,4 +1,5 @@
 const adminapi = require('./api/adminAPI');
+const resultapi = require('./api/resultAPI');
 const studentapi = require('./api/studentAPI');
 const teacherapi = require('./api/teacherAPI');
 const login = require('./controllers/login');
@@ -10,6 +11,7 @@ const router = require('express').Router()
 router.post('/login', login)
 router.use('/student', studentapi)
 router.use('/teacher', teacherapi)
+router.use('/result', resultapi)
 router.use('/admin', adminapi)
 
 module.exports = router;

@@ -4,12 +4,12 @@ const teacherAuth = (req, res, next) =>{
         const {token} = req.headers;
         const exectToken = token.split(' ')[1]
         const data =  jwt.verify(exectToken, process.env.JWTSECRET)
-        const {teacher_id, dob, first_name, ispermit} = data;
+        const {teacher_id, subject, first_name, ispermit} = data;
         req.ispermit = ispermit;
         req.teacher_id = teacher_id;
-        req.dob = dob;
-        req.name = first_name
-
+        req.subject = subject ;
+        req.name = first_name;
+        
         next()
     } catch (error) {
         console.log(error.message)
