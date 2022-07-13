@@ -16,7 +16,6 @@ exports.teacherAction = {
     });
   },
 
-
   // get one teacher
   oneThacher(req, res, next) {
     const teacher_id = req.params['id']
@@ -33,7 +32,6 @@ exports.teacherAction = {
     });
   },
 
-  
   // add one teacher.
   addTeacher(req, res, next) {
     const { full_name, email, dob, designation, subject, education, varsity_name, gender, phone } = req.validation;
@@ -74,7 +72,6 @@ exports.teacherAction = {
     });
   },
   
-
   // delete one teacher
   deleteTeacher(req, res, next) {
     const teacher_id = req.params['id']
@@ -89,5 +86,39 @@ exports.teacherAction = {
       res.json(result);
     });
   },
+
+  // pure admin section func only.
+  // isparmit actions
+  isParmitAll(req, res, next){
+    const {ispermit } = req.body;
+    const value = ispermit ? 1 : 0
+    const queryString = `UPDATE teachers SET ispermit = ${value}`
+    db.query(queryString, (err, result) => {
+      err && console.log(err);
+      if (err) {
+        return next(err);
+      }
+      console.log(result);
+      res.json(result);
+    });
+  },
+
+  isParmitOne(req, res, next){
+    const {ispermit, teacher_id } = req.body;
+    if(!teacher_id){
+      return res.json({error : "teacher id required!!"})
+    }
+    const value = ispermit ? 1 : 0
+    const queryString = `UPDATE teachers SET ispermit = ${value} WHERE teacher_id = '${teacher_id}'`
+    db.query(queryString, (err, result) => {
+      err && console.log(err);
+      if (err) {
+        return next(err);
+      }
+      console.log(result);
+      res.json(result);
+    });
+  },
+
 
 }

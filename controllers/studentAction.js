@@ -5,7 +5,10 @@ exports.studentAction = {
 
   // get all student handler
   allstudent(req, res, next) {
-    const queryString = `select * from students`;
+    const queryString = `select 
+    student_id, first_name, last_name, roll, gender, dob, department, classes, phone,
+    email, image, time, division, district, police_station, post_office, village
+    from students NATURAL JOIN addresses`;
     db.query(queryString, (err, result) => {
       if (err) {
         return next(err.message);
@@ -19,7 +22,10 @@ exports.studentAction = {
   // student part
   oneStudent(req, res, next) {
     const student_id = req.student_id;
-    const queryString = `SELECT * FROM students WHERE student_id = ${student_id}`;
+    const queryString = `SELECT 
+    student_id, first_name, last_name, roll, gender, dob, department, classes, phone,
+    email, image, time, division, district, police_station, post_office, village
+    FROM students NATURAL JOIN addresses WHERE student_id = ${student_id}`;
     db.query(queryString, (err, result) => {
       if (err) {
         return next(err.message);

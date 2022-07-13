@@ -12,7 +12,7 @@ const studentAuth = (req, res, next) =>{
         next()
     } catch (error) {
         console.log(error.message)
-        return res.json({error : 'Access Denied!!!'})
+        return res.status(401).json({error : 'Access Denied!!!'})
     }
 }
 
