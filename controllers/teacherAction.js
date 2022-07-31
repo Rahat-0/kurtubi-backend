@@ -2,17 +2,42 @@ const db = require("../sql")
 
 exports.teacherAction = {
 
+  counts(req, res, next){
+    const branch = req.params['branch']
+    const queryString = `select COUNT(teacher_id) AS 'count_teacher', (select COUNT(teacher_id) from teachers WHERE branch = '${branch}') AS 
+    'count_branch', (select COUNT(teacher_id) from teachers WHERE isblock = '1') AS 'count_block'  from teachers `;
+    db.query(queryString, (err, result) => {
+      if (err) {
+        return next(err.message);
+      }
+      console.log(result);
+      res.json(result);
+    });
+  },
+
+// get all branch handler
+  allbranch(req, res, next) {
+    const queryString = `select branch from teachers`;
+    db.query(queryString, (err, result) => {
+      if (err) {
+        return next(err.message);
+      }
+      console.log(result);
+      res.json(result);
+    });
+  },
+
   // get all teacher
   allThacher(req, res, next) {
-    const queryString = `SELECT * FROM teachers`
+    const branch = req.params['branch']
+    const queryString = `SELECT * FROM teachers WHERE branch = '${branch}'`
 
     db.query(queryString, (err, result) => {
       err && console.log(err);
       if (err) {
         return next(err);
       }
-      result[0] ? res.json(result) : res.json({ error: "data not found!!" })
-
+	 res.json(result)
     });
   },
 
@@ -27,7 +52,7 @@ exports.teacherAction = {
         return next(err);
       }
 
-      result[0] ? res.json(result) : res.json({ error: "data not found!!" })
+       res.json(result) 
 
     });
   },

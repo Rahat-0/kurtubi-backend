@@ -9,7 +9,9 @@ const studentapi = require('express').Router()
 // protected routes
 // student profile routes
 //preferred for admins only.
-studentapi.get('/', studentAction.allstudent )
+studentapi.get('/branch', studentAction.allbranch);
+studentapi.get('/all/:branch', studentAction.allstudent );
+studentapi.get('/count/:branch', studentAction.counts)
 studentapi.post('/add', imageUpload.single('image'), studentValidation,  studentAction.addOneStudent)
 studentapi.post('/update', studentValidation , studentAction.updateOneStudent)
 //requird student_id.

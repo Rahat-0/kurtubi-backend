@@ -11,7 +11,9 @@ teacherapi.put('/update', imageUplaod.single('image'), teacherAction.updateTeach
 
 // for admin purpose
 // get all teachers
-teacherapi.get('/all', teacherAction.allThacher);
+teacherapi.get('/branch', teacherAction.allbranch);
+teacherapi.get('/count/:branch', teacherAction.counts)
+teacherapi.get('/all/:branch', teacherAction.allThacher);
 
 // add teachers. require data...
 teacherapi.post('/add', imageUplaod.single('image'), teacherValidation, teacherAction.addTeacher)

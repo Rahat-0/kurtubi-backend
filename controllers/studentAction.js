@@ -2,13 +2,38 @@ const db = require("../sql");
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcrypt')
 exports.studentAction = {
+  counts(req, res, next){
+    const branch = req.params['branch']
+    const queryString = `select COUNT(student_id) AS 'count_student', (select COUNT(student_id) from students WHERE branch = '${branch}') AS 
+    'count_branch', (select COUNT(student_id) from students WHERE isblock = '1') AS 'count_block' from students `;
+    db.query(queryString, (err, result) => {
+      if (err) {
+        return next(err.message);
+      }
+      console.log(result);
+      res.json(result);
+    });
+  },
+
+// get all branch handler
+  allbranch(req, res, next) {
+    const queryString = `select branch from students`;
+    db.query(queryString, (err, result) => {
+      if (err) {
+        return next(err.message);
+      }
+      console.log(result);
+      res.json(result);
+    });
+  },
 
   // get all student handler
   allstudent(req, res, next) {
-    const queryString = `select 
-    student_id, first_name, last_name, roll, gender, dob, department, classes, phone,
-    email, image, time, division, district, police_station, post_office, village
-    from students NATURAL JOIN addresses`;
+    const branch = req.params['branch']
+    const queryString = `select CONCAT(first_name, ' ', last_name) AS 'name',
+    student_id, roll, gender, dob, branch, classes, phone, isblock,
+    email, image, time
+    from students WHERE branch = '${branch}'`;
     db.query(queryString, (err, result) => {
       if (err) {
         return next(err.message);
