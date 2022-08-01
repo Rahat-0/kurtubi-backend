@@ -2,10 +2,24 @@ const db = require("../sql");
 
 const resultAction = {
 
+   branchAndClass(req, res, next) {
+        
+        const queryString = `SELECT branch, classes FROM results NATURAL JOIN students`
+        db.execute(queryString, (error, result) => {
+            if (error) {
+                console.log(error.message)
+                next(error)
+                return;
+            }
+            console.log(result)
+            res.json(result )
+        })
+    },
+
     resultAll(req, res, next) {
         const classes = req.params['classes']
-        const semester = req.params['semester']
-        const queryString = `SELECT first_name, classes, last_name, student_id, semester, subject_name, subject_result, subject_ranking, teacher_id FROM results NATURAL JOIN students WHERE results.semester  = ${semester} AND students.classes = ${classes}`
+        const branch = req.params['branch']
+        const queryString = `SELECT CONCAT(first_name, ' ', last_name) AS 'name' , classes, branch, student_id, semester, subject_name, subject_result, subject_ranking, teacher_id FROM results NATURAL JOIN students WHERE students.branch  = '${branch}' AND students.classes = ${classes}`
         db.execute(queryString, (error, result) => {
             if (error) {
                 console.log(error.message)

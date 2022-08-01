@@ -2,9 +2,12 @@ const resultAction = require('../controllers/resultAction')
 const teacherAuth = require('../middlewares/teacherAuth')
 const resultapi = require('express').Router()
 
+// get branch and class of the whole student
+resultapi.get('/branchandclass', resultAction.branchAndClass)
+
 // student result routes
-// get all student list. required class number and semester number through params. 
-resultapi.get('/all/:classes/:semester', resultAction.resultAll)
+// get all student list. required branch name and semester number through params. 
+resultapi.get('/all/:branch/:classes', resultAction.resultAll)
 
 // get all result for one student. required student_id though params.
 resultapi.get('/one/:id', resultAction.resultOneAll )
