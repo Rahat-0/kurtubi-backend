@@ -34,7 +34,7 @@ const resultAction = {
 
     resultOneAll(req, res, next) {
         const student_id = req.params['id']
-        const queryString = `SELECT first_name, last_name, classes, student_id, semester, subject_name, subject_result, subject_ranking, teacher_id FROM results NATURAL JOIN students WHERE student_id = ${student_id} `
+        const queryString = `SELECT CONCAT(first_name, ' ', last_name) AS 'name', classes, student_id, semester, subject_name, subject_result, subject_ranking, teacher_id FROM results NATURAL JOIN students WHERE student_id = ${student_id} `
         db.execute(queryString, (error, result) => {
             if (error) {
                 console.log(error.message)

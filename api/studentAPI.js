@@ -1,7 +1,8 @@
 const { studentAction } = require('../controllers/studentAction');
 const studentAuth = require('../middlewares/studentAuth');
 const studentValidation = require('../middlewares/studentValidation')
-const imageUpload = require('../middlewares/imageUpload')
+const imageUpload = require('../middlewares/imageUpload');
+const refreshToken = require('../middlewares/refreshToken');
 const studentapi = require('express').Router()
 
 //root route--> api/student/...
@@ -9,6 +10,7 @@ const studentapi = require('express').Router()
 // protected routes
 // student profile routes
 //preferred for admins only.
+studentapi.get('/auth', refreshToken)
 studentapi.get('/branch', studentAction.allbranch);
 studentapi.get('/all/:branch', studentAction.allstudent );
 studentapi.get('/count/:branch', studentAction.counts)

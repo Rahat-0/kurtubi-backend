@@ -24,11 +24,16 @@ const login = async (req, res, next) => {
                 return next(err)
             }
             try {
-                const { student_id, dob, password, first_name } = result[0]
+                const { student_id, dob, password, first_name, isblock } = result[0]
+                console.log(result[0])
                 const check = await bcrypt.compare(pass, password)
+                console.log(check)
                 if (check) {
-                    const token = jwt.sign({ student_id, dob, first_name }, process.env.JWTSECRET)
-                    res.setHeader('token', "bearer " + token)
+                    const accessToken = jwt.sign({ student_id, dob, first_name, isblock }, process.env.ACCESSTOKEN, {expiresIn : '3m'})
+                    const refreshToken = jwt.sign({ student_id, dob, first_name, isblock }, process.env.REFRESHTOKEN, {expiresIn : '10m'})
+                    res.setHeader('accesstoken' , "bearer " + accessToken)
+                    res.setHeader('refreshtoken' , 'bearer ' + refreshToken)
+                    
                     return res.json({ success: "login success!! " })
                 } else {
                     return res.json({ error: "student_id or password incorrect!!" })
@@ -44,25 +49,30 @@ const login = async (req, res, next) => {
     }
 
     if (teacher_id && password) {
-        const queryString = `SELECT * FROM teachers WHERE teacher_id = ${teacher_id} `
+        const queryString = `SELECT full_name AS name, teacher_id, dob, isblock, password, ispermit FROM teachers WHERE teacher_id = ${teacher_id} `
         db.execute(queryString, async (err, result) => {
             if (err) {
                 return next(err)
             }
-
+            
             try {
-                const { teacher_id, subject, password, first_name, ispermit } = result[0]
+                const { teacher_id, dob, password, name, ispermit, isblock } = result[0]
+                console.log(result[0])
                 const check = await bcrypt.compare(pass, password)
+                console.log(check)
                 if (check) {
-                    const token = jwt.sign({ teacher_id, subject, first_name, ispermit }, process.env.JWTSECRET)
-                    res.setHeader('token', "bearer " + token)
+                    const accessToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.ACCESSTOKEN)
+                    const refreshToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.REFRESHTOKEN)
+                    res.setHeader('accesstoken' , "bearer " + accessToken)
+                    res.setHeader('refreshtoken' , 'bearer ' + refreshToken)
                     return res.json({ success: "login success!! " })
                 } else {
                     return res.json({ error: "teacher_id or password incorrect!!" })
                 }
 
             } catch (error) {
-                return res.json({error : "teacher_id or password incorrect!!"})
+                console.log(error)
+                return res.json({error : "teacher_id or password incorrect!!!"})
             }
 
 
