@@ -57,6 +57,22 @@ exports.teacherAction = {
     });
   },
 
+    // get one teacher for teacher only
+    singleThacher(req, res, next) {
+      const teacher_id = req.teacher_id
+      const queryString = `SELECT * FROM teachers WHERE teacher_id = ${teacher_id}`
+  
+      db.query(queryString, (err, result) => {
+        err && console.log(err);
+        if (err) {
+          return next(err);
+        }
+  
+         res.json(result) 
+  
+      });
+    },
+
   // add one teacher.
   addTeacher(req, res, next) {
     const { full_name, email, dob, designation, subject, education, varsity_name, gender, phone } = req.validation;

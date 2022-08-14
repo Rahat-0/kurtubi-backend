@@ -1,11 +1,15 @@
 const { teacherAction } = require('../controllers/teacherAction');
 const imageUplaod = require('../middlewares/imageUpload');
+const refreshToken = require('../middlewares/refreshToken');
+const teacherAuth = require('../middlewares/teacherAuth');
 const teacherValidation = require('../middlewares/teacherValidation');
 const teacherapi = require('express').Router()
 
 // root route --> api/teacher/...
 
 // teacher/admin purpose
+teacherapi.post('/auth', refreshToken)
+teacherapi.get('/single', teacherAuth, teacherAction.singleThacher)
 teacherapi.get('/one/:id', teacherAction.oneThacher)
 teacherapi.put('/update', imageUplaod.single('image'), teacherAction.updateTeacher)
 

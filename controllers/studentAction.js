@@ -48,9 +48,8 @@ exports.studentAction = {
   oneStudent(req, res, next) {
     const student_id = req.student_id;
     const queryString = `SELECT 
-    student_id, first_name, last_name, roll, gender, dob, department, classes, phone,
-    email, image, time, division, district, police_station, post_office, village
-    FROM students NATURAL JOIN addresses WHERE student_id = ${student_id}`;
+    student_id, first_name, last_name, roll, gender, dob, branch, classes, phone,
+    email, image, time FROM students WHERE student_id = ${student_id}`;
     db.query(queryString, (err, result) => {
       if (err) {
         return next(err.message);

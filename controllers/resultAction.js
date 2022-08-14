@@ -46,6 +46,21 @@ const resultAction = {
         })
     },
 
+// for student actions
+resultOneStudent(req, res, next) {
+        const student_id = req.student_id;
+        const queryString = `SELECT result_class, student_id, result_semester, subject_name, subject_result, subject_ranking, teacher_id FROM results  WHERE student_id = ${student_id} `
+        db.execute(queryString, (error, result) => {
+            if (error) {
+                console.log(error.message)
+                next(error)
+                return;
+            }
+            console.log(result)
+            res.json( result )
+        })
+    },
+
 // only teacher can insert data.
 // teacher must be permited for insert result.
 // teacher can add only his/har departmental subject.
