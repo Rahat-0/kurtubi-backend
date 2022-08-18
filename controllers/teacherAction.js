@@ -1,4 +1,6 @@
 const db = require("../sql")
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 
 exports.teacherAction = {
 
@@ -126,6 +128,44 @@ exports.teacherAction = {
       console.log(result);
       res.json(result);
     });
+  },
+
+
+  updatePassword(req, res, next) {
+    const teacher_id = req.teacher_id;
+    const { password, newPassword } = req.body;
+    if (!password || !newPassword) {
+      return res.json({ error: "field required!" })
+    }
+    const pass = password
+
+    const queryString = `select * from teachers where teacher_id = ${teacher_id}`;
+    db.query(queryString, (err, result) => {
+      const updatePassExecution = async () => {
+        try {
+          if (err) {
+            return next(err);
+          }
+          const { password } = result[0]
+          const check = await bcrypt.compare(pass, password)
+          if (check) {
+            const setPass = await bcrypt.hash(newPassword, 10)
+            db.execute(`UPDATE teachers SET password = '${setPass}' WHERE teacher_id = ${teacher_id} `, (err, result) => {
+              if (err) {
+                return next(err)
+              }
+              res.json(result)
+            })
+          } else {
+            return res.json({ error: "password wrong!!" })
+          }
+        } catch (error) {
+          next(error)
+        }
+      }
+      updatePassExecution()
+    });
+
   },
 
   // pure admin section func only.

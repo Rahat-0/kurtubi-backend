@@ -45,7 +45,7 @@ const login = async (req, res, next) => {
 
 
             } catch (error) {
-                return res.json({ error: "student_id or password incorrect!!" })
+                return res.json({ error: error.message })
             }
 
         }
@@ -65,8 +65,8 @@ const login = async (req, res, next) => {
                 const check = await bcrypt.compare(pass, password)
                 console.log(check)
                 if (check) {
-                    const accessToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.ACCESSTOKEN, { expiresIn: '1m' })
-                    const refreshToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.REFRESHTOKEN, { expiresIn: '2h' })
+                    const accessToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.ACCESSTOKEN, { expiresIn: '30s' })
+                    const refreshToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.REFRESHTOKEN, { expiresIn: '2m' })
                     res.setHeader('accesstoken', "bearer " + accessToken)
                     res.setHeader('refreshtoken', 'bearer ' + refreshToken)
                     return res.json({ 

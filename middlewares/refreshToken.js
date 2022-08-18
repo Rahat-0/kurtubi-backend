@@ -18,7 +18,8 @@ const refreshToken =  (req, res, next) => {
             return res.json({ success: "login success!! ", accesstoken : "bearer " + accessToken })
         }
         )
-        }else if(teacher_id){
+        }
+	if(teacher_id){
             const queryString = `SELECT full_name AS name, teacher_id, dob, isblock, ispermit FROM teachers WHERE teacher_id = ${teacher_id} `
             db.execute(queryString, async (err, result) => {
             if (err) {
@@ -27,7 +28,7 @@ const refreshToken =  (req, res, next) => {
             const {  teacher_id, dob, name, isblock, ispermit } = result[0]
             const accessToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.ACCESSTOKEN, { expiresIn: '1m' })
             res.setHeader('accesstoken', "bearer " + accessToken)
-            return res.json({ success: "login success!! " })
+            return res.json({ success: "login success!! ", accesstoken : "bearer " + accessToken })
         }
         )
         }

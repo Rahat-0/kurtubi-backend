@@ -31,5 +31,7 @@ teacherapi.patch('/isparmitall', teacherAction.isParmitAll)
 // update permision, require teacher_id and boolean ispermit -true- or -false- .
 teacherapi.patch('/isparmitone', teacherAction.isParmitOne)
 
+// update teacher's password, require password, newPassword
+teacherapi.post('/updatepassword', teacherAuth, teacherAction.updatePassword)
 
 module.exports = teacherapi;
