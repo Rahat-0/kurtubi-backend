@@ -201,5 +201,30 @@ exports.teacherAction = {
     });
   },
 
+resetPassword(req, res, next) {
+    const { teacher_id } = req.body;
+    const defaultPass = '$2a$10$q47et2EFIp8imVnmf59yLeCvBaDfZkKuK5K8XeJWz5IqQXbBPJ02C'
+    const queryString = `UPDATE teachers SET password = '${defaultPass}'  WHERE teacher_id = ${teacher_id} `;
+    db.execute(queryString, (err, result) => {
+      if (err) {
+        return next(err)
+      }
+      res.json(result)
+
+    })
+  },
+
+
+  blockTeacher(req, res, next){
+    const { teacher_id, block } = req.body;
+    const queryString = `UPDATE teachers SET isblock = ${block}  WHERE teacher_id = ${teacher_id} `;
+    db.execute(queryString, (err, result) => {
+      if (err) {
+        return next(err)
+      }
+      res.json(result)
+    })
+  }
+
 
 }

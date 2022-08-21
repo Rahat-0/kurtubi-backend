@@ -13,7 +13,7 @@ const studentAuth = (req, res, next) =>{
             return res.status(403).json({error : "author unknown!"})
         }
         if(isblock == 1){
-            return res.status(402).json({error : "account has been blocked!"})
+            return res.status(403).json({error : "account has been blocked!"})
         }else{
             req.student_id = student_id;
             req.dob = dob;

@@ -146,8 +146,19 @@ exports.studentAction = {
       if (err) {
         return next(err)
       }
-      res.json({ result })
+      res.json(result)
 
+    })
+  },
+
+  blockStudent(req, res, next){
+    const { student_id, block } = req.body;
+    const queryString = `UPDATE students SET isblock = ${block}  WHERE student_id = ${student_id} `;
+    db.execute(queryString, (err, result) => {
+      if (err) {
+        return next(err)
+      }
+      res.json(result)
     })
   }
 

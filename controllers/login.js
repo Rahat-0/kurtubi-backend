@@ -27,10 +27,15 @@ const login = async (req, res, next) => {
                 const { student_id, dob, password, name, isblock } = result[0]
                 console.log(result[0])
                 const check = await bcrypt.compare(pass, password)
+		const notBlock = isblock === 0
+		if(!notBlock){
+			return res.status(403).json({error : 'account has been blocked'})
+			}
+
                 console.log(check)
-                if (check) {
+                if (check && notBlock) {
                     const accessToken = jwt.sign({ student_id, dob, name, isblock }, process.env.ACCESSTOKEN, { expiresIn: '30s' })
-                    const refreshToken = jwt.sign({ student_id, dob, name, isblock }, process.env.REFRESHTOKEN, { expiresIn: '2m' })
+                    const refreshToken = jwt.sign({ student_id, dob, name, isblock }, process.env.REFRESHTOKEN, { expiresIn: '3m' })
                    //res.setHeader('accesstoken', "bearer " + accessToken)
                    //res.cookie('refreshtoken', 'bearer ' + refreshToken)
 
@@ -40,12 +45,12 @@ const login = async (req, res, next) => {
                         refreshtoken: 'bearer ' + refreshToken
                     })
                 } else {
-                    return res.json({ error: "student_id or password incorrect!!" })
+                    return res.json({ error: "student_id or password incorrect!" })
                 }
 
 
             } catch (error) {
-                return res.json({ error: error.message })
+                return res.json({ error: 'student_id or password incorrect!!!' })
             }
 
         }
@@ -63,10 +68,14 @@ const login = async (req, res, next) => {
                 const { teacher_id, dob, password, name, ispermit, isblock } = result[0]
                 console.log(result[0])
                 const check = await bcrypt.compare(pass, password)
+		const notBlock = isblock === 0
+		if(!notBlock){
+			return res.status(403).json({error : 'account has been blocked'})
+			}
                 console.log(check)
-                if (check) {
+                if (check && notBlock) {
                     const accessToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.ACCESSTOKEN, { expiresIn: '30s' })
-                    const refreshToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.REFRESHTOKEN, { expiresIn: '2m' })
+                    const refreshToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.REFRESHTOKEN, { expiresIn: '3m' })
                     res.setHeader('accesstoken', "bearer " + accessToken)
                     res.setHeader('refreshtoken', 'bearer ' + refreshToken)
                     return res.json({ 
@@ -75,7 +84,7 @@ const login = async (req, res, next) => {
                         refreshtoken: 'bearer ' + refreshToken
                      })
                 } else {
-                    return res.json({ error: "teacher_id or password incorrect!!" })
+                    return res.json({ error: "teacher_id or password incorrect!" })
                 }
 
             } catch (error) {

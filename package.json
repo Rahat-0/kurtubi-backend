@@ -5,8 +5,8 @@
   "main": "\u001b[D\u001b[D\u001b[D\u001bserver.js)",
   "scripts": {
     "start": "nodemon server.js",
-    "frontend" : "cd ../ && cd frontend && yarn start",
-    "dev" : "concurrently \"yarn run start\" \"yarn run frontend\""
+    "frontend": "cd ../ && cd frontend && yarn start",
+    "dev": "concurrently \"yarn run start\" \"yarn run frontend\""
   },
   "author": "rahat",
   "license": "ISC",
@@ -23,5 +23,6 @@
   "devDependencies": {
     "concurrently": "^7.3.0",
     "nodemon": "^2.0.19"
+
   }
 }

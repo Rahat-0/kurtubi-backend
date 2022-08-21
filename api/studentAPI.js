@@ -17,8 +17,9 @@ studentapi.get('/all/:branch', studentAction.allstudent );
 studentapi.get('/count/:branch', studentAction.counts)
 studentapi.post('/add', imageUpload.single('image'), studentValidation,  studentAction.addOneStudent)
 studentapi.post('/update', studentValidation , studentAction.updateOneStudent)
+studentapi.post('/block', studentAction.blockStudent)
 //requird student_id.
-studentapi.put('/resetpassword', studentAction.resetPassword)
+studentapi.put('/reset', studentAction.resetPassword)
 
 // preferred for students only.
 studentapi.get('/single', studentAuth, studentAction.oneStudent )
