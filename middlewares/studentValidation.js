@@ -1,5 +1,5 @@
 const studentValidation = (req, res, next) => {
-    const { student_id, first_name, last_name, email, dob, phone, department, classes, gender, roll } = req.body;
+    const { student_id, first_name, last_name, email, dob, phone, branch, classes, gender, roll } = req.body;
     try {
          if (!first_name) {
             return res.json({ error: 'first name required!!' }) 
@@ -11,8 +11,8 @@ const studentValidation = (req, res, next) => {
             return res.json({ error: 'date of birth required!!' })
         } else if (!phone) {
             return res.json({ error: 'phone number required!!' })
-        } else if (!department) {
-            return res.json({ error: 'department required!!' })
+        } else if (!branch) {
+            return res.json({ error: 'branch required!!' })
         } else if (!classes) {
             return res.json({ error: 'class name required!!' })
         } else if (!roll) {
@@ -31,7 +31,7 @@ const studentValidation = (req, res, next) => {
             return res.json({ error: 'date of birth too long!!' })
         } else if (!phone.length > 20) {
             return res.json({ error: 'phone number too long!!' })
-        } else if (!department.length > 50) {
+        } else if (!branch.length > 50) {
             return res.json({ error: 'department too long!!' })
         } else if (!classes.length > 10) {
             return res.json({ error: 'class name too long!!' })
@@ -43,7 +43,7 @@ const studentValidation = (req, res, next) => {
             return res.json({ error: 'gender must be valid!!' })
         }
 
-        req.validation = { student_id, first_name, last_name, dob, email, phone, department, classes, gender, roll }
+        req.validation = { student_id, first_name, last_name, dob, email, phone, branch, classes, gender, roll }
         next()
     } catch (error) {
         console.log(error)

@@ -77,11 +77,11 @@ exports.teacherAction = {
 
   // add one teacher.
   addTeacher(req, res, next) {
-    const { full_name, email, dob, designation, subject, education, varsity_name, gender, phone } = req.validation;
+    const { full_name, email, dob, designation, subject, education, varsity_name, gender, phone, branch } = req.validation;
     const image = req.file ? req.file.filename : 'teacher.jpg'
     const queryString = `INSERT INTO teachers
-     (full_name, email, dob, designation, subject, education, varsity_name, gender, phone, image )
-     VALUES('${full_name}', '${email}', '${dob}', '${designation}', '${subject}', '${education}','${varsity_name}', '${gender}', '${phone}', '${image}') `
+     (full_name, email, dob, designation, subject, education, varsity_name, gender, phone, branch, image )
+     VALUES('${full_name}', '${email}', '${dob}', '${designation}', '${subject}', '${education}','${varsity_name}', '${gender}', '${phone}', '${branch}', '${image}') `
 
     db.query(queryString, (err, result) => {
       err && console.log(err);

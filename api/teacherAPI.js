@@ -1,4 +1,5 @@
 const { teacherAction } = require('../controllers/teacherAction');
+const adminAuth = require('../middlewares/adminAuth');
 const imageUplaod = require('../middlewares/imageUpload');
 const refreshToken = require('../middlewares/refreshToken');
 const teacherAuth = require('../middlewares/teacherAuth');
@@ -17,8 +18,8 @@ teacherapi.put('/update', imageUplaod.single('image'), teacherAction.updateTeach
 // get all teachers
 teacherapi.get('/branch', teacherAction.allbranch);
 teacherapi.get('/count/:branch', teacherAction.counts);
-teacherapi.get('/all/:branch', teacherAction.allThacher);
-teacherapi.put('/reset', teacherAction.resetPassword);
+teacherapi.get('/all/:branch', adminAuth, teacherAction.allThacher);
+teacherapi.put('/reset', adminAuth, teacherAction.resetPassword);
 
 // add teachers. require data...
 teacherapi.post('/add', imageUplaod.single('image'), teacherValidation, teacherAction.addTeacher)
@@ -36,6 +37,6 @@ teacherapi.patch('/isparmitone', teacherAction.isParmitOne)
 teacherapi.post('/updatepassword', teacherAuth, teacherAction.updatePassword)
 
 // block teacher
-teacherapi.post('/block', teacherAction.blockTeacher)
+teacherapi.post('/block', adminAuth, teacherAction.blockTeacher)
 
 module.exports = teacherapi;

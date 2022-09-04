@@ -17,7 +17,7 @@ app.use('/api', router)
 
 app.use((err, req, res, next)=>{
   console.log(err)
-  res.json({error : 'error handled!! ' + err.message })
+  res.status(400).json(err.message)
 })
 app.listen(port, () => {
     db && console.log('database connected')

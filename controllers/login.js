@@ -18,13 +18,13 @@ const login = async (req, res, next) => {
     }
 
     if (student_id && password) {
-        const queryString = `SELECT CONCAT(first_name,' ',last_name) AS 'name', password, student_id, dob, isblock FROM students WHERE student_id = ${student_id}`
+        const queryString = `SELECT CONCAT(first_name,' ',last_name) AS 'name', password, image, student_id, dob, isblock FROM students WHERE student_id = ${student_id}`
         db.execute(queryString, async (err, result) => {
             if (err) {
                 return next(err)
             }
             try {
-                const { student_id, dob, password, name, isblock } = result[0]
+                const { student_id, dob, password, name, image, isblock } = result[0]
                 console.log(result[0])
                 const check = await bcrypt.compare(pass, password)
 		const notBlock = isblock === 0
@@ -34,8 +34,8 @@ const login = async (req, res, next) => {
 
                 console.log(check)
                 if (check && notBlock) {
-                    const accessToken = jwt.sign({ student_id, dob, name, isblock }, process.env.ACCESSTOKEN, { expiresIn: '30s' })
-                    const refreshToken = jwt.sign({ student_id, dob, name, isblock }, process.env.REFRESHTOKEN, { expiresIn: '3m' })
+                    const accessToken = jwt.sign({ student_id, dob, name, image, isblock }, process.env.ACCESSTOKEN, { expiresIn: '30s' })
+                    const refreshToken = jwt.sign({ student_id, dob, name, image, isblock }, process.env.REFRESHTOKEN, { expiresIn: '3m' })
                    //res.setHeader('accesstoken', "bearer " + accessToken)
                    //res.cookie('refreshtoken', 'bearer ' + refreshToken)
 
@@ -50,6 +50,7 @@ const login = async (req, res, next) => {
 
 
             } catch (error) {
+		console.log(error)
                 return res.json({ error: 'student_id or password incorrect!!!' })
             }
 
@@ -58,14 +59,14 @@ const login = async (req, res, next) => {
     }
 
     if (teacher_id && password) {
-        const queryString = `SELECT full_name AS name, teacher_id, dob, isblock, password, ispermit FROM teachers WHERE teacher_id = ${teacher_id} `
+        const queryString = `SELECT full_name AS name, teacher_id, dob, image, isblock, password, ispermit FROM teachers WHERE teacher_id = ${teacher_id} `
         db.execute(queryString, async (err, result) => {
             if (err) {
                 return next(err)
             }
 
             try {
-                const { teacher_id, dob, password, name, ispermit, isblock } = result[0]
+                const { teacher_id, dob, password, name, image, ispermit, isblock } = result[0]
                 console.log(result[0])
                 const check = await bcrypt.compare(pass, password)
 		const notBlock = isblock === 0
@@ -74,8 +75,8 @@ const login = async (req, res, next) => {
 			}
                 console.log(check)
                 if (check && notBlock) {
-                    const accessToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.ACCESSTOKEN, { expiresIn: '30s' })
-                    const refreshToken = jwt.sign({ teacher_id, dob, name, isblock, ispermit }, process.env.REFRESHTOKEN, { expiresIn: '3m' })
+                    const accessToken = jwt.sign({ teacher_id, dob, name, image, isblock, ispermit }, process.env.ACCESSTOKEN, { expiresIn: '30s' })
+                    const refreshToken = jwt.sign({ teacher_id, dob, name, image, isblock, ispermit }, process.env.REFRESHTOKEN, { expiresIn: '3m' })
                     res.setHeader('accesstoken', "bearer " + accessToken)
                     res.setHeader('refreshtoken', 'bearer ' + refreshToken)
                     return res.json({ 

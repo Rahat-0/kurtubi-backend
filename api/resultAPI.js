@@ -1,4 +1,5 @@
 const resultAction = require('../controllers/resultAction')
+const adminAuth = require('../middlewares/adminAuth')
 const teacherAuth = require('../middlewares/teacherAuth')
 const resultapi = require('express').Router()
 
@@ -7,7 +8,7 @@ resultapi.get('/branchandclass', resultAction.branchAndClass)
 
 // student result routes
 // get all student list. required branch name and semester number through params. 
-resultapi.get('/all/:branch/:classes', resultAction.resultAll)
+resultapi.get('/all/:branch/:classes', adminAuth, resultAction.resultAll)
 
 // get all result for one student. required student_id though params.
 resultapi.get('/one/:id', resultAction.resultOneAll )

@@ -10,7 +10,7 @@ const studentAuth = (req, res, next) =>{
         console.log(data)
         const {student_id, dob, name, isblock} = data;
         if(!student_id){
-            return res.status(403).json({error : "author unknown!"})
+            return res.status(401).json({error : "author unknown!"})
         }
         if(isblock == 1){
             return res.status(403).json({error : "account has been blocked!"})

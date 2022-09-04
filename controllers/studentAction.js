@@ -83,11 +83,11 @@ exports.studentAction = {
 
   // add one student handler
   addOneStudent(req, res, next) {
-    const { first_name, last_name, dob, phone, email, department, classes, gender, roll } = req.validation;
+    const { first_name, last_name, dob, phone, email, branch, classes, gender, roll } = req.validation;
     const image = req.file ? req.file.filename : 'student.jpg'
     const queryString = `INSERT INTO students
-     (first_name, last_name, dob, phone, email, department, classes, gender, roll, image )
-     VALUES('${first_name}', '${last_name}', '${dob}', '${phone}', '${email}', '${department}','${classes}', '${gender}', '${roll}', '${image}') `
+     (first_name, last_name, dob, phone, email, branch, classes, gender, roll, image )
+     VALUES('${first_name}', '${last_name}', '${dob}', '${phone}', '${email}', '${branch}','${classes}', '${gender}', '${roll}', '${image}')`
 
     db.query(queryString, (err, result) => {
       err && console.log(err);

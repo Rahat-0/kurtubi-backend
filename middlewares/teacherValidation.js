@@ -1,5 +1,5 @@
 const teacherValidation = (req, res, next) => {
-    const {  full_name, email, dob, designation, subject, education, varsity_name, gender, phone, ispermit } = req.body;
+    const {  full_name, email, dob, designation, subject, education, branch, varsity_name, gender, phone, ispermit } = req.body;
     try {
          if (!full_name) {
             return res.json({ error: 'full name required!!' }) 
@@ -19,7 +19,9 @@ const teacherValidation = (req, res, next) => {
             return res.json({ error: 'gender required!!' })
         }else if (!varsity_name) {
             return res.json({ error: 'varsity name required!!' })
-        }
+        }else if(!branch){
+	    return res.json({error : 'branch required!'})
+	}
 
         if (full_name.length > 50) {
             return res.json({ error: 'first name too long!!' })
@@ -43,7 +45,7 @@ const teacherValidation = (req, res, next) => {
             return res.json({ error: 'gender must be valid!!' })
         }
 
-        req.validation = { full_name, email, dob, designation, subject, education, varsity_name, gender, phone, ispermit }
+        req.validation = { full_name, email, dob, designation, subject, education, varsity_name, gender, branch, phone, ispermit }
         next()
     } catch (error) {
         next(error)
