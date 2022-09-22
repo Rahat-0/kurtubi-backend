@@ -17,6 +17,6 @@ router.use('/address', address)
 router.use('/teacher', teacherapi)
 router.use('/result', resultapi)
 router.use('/admin', adminapi)
-router.use('/test', studentAuth, test)
+router.use('/test',  test)
 
 module.exports = router;

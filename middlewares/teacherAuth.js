@@ -7,7 +7,7 @@ const teacherAuth = (req, res, next) =>{
         }
         const exectToken = accesstoken.split(' ')[1]
         const data =  jwt.verify(exectToken, process.env.ACCESSTOKEN)
-        const {teacher_id, dob, name, isblock, ispermit} = data;
+        const {teacher_id, dob, name, isblock, ispermit, subject} = data;
         if(!teacher_id){
             return res.status(403).json({error : "unknown author!"})
         }
@@ -18,6 +18,7 @@ const teacherAuth = (req, res, next) =>{
             req.teacher_id = teacher_id;
             req.dob = dob ;
             req.name = name;
+            req.subject = subject;
             next()
         }
         

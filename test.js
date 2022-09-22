@@ -1,9 +1,11 @@
+
 const test = require('express').Router()
 
-test.get('/', (req, res)=>{
-    res.json('test success')
-    
+test.get('/', async (req, res)=>{
+   console.log('test');
+   res.send('test')
 })
+
 
 
 module.exports = test
