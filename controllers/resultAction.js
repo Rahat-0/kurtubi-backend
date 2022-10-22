@@ -11,7 +11,7 @@ const resultAction = {
                 next(error)
                 return;
             }
-            console.log(result)
+            console.log('branch showing')
             res.json(result)
         })
     },
@@ -27,6 +27,22 @@ const resultAction = {
                 return;
             }
             console.log(result)
+            res.json({ result })
+        })
+    },
+
+    resultAllTeacher(req, res, next) {
+        const teacher_id = req.teacher_id;
+        console.log(teacher_id);
+        const classes = req.params['classes']
+        const queryString = `SELECT CONCAT(first_name, ' ', last_name) AS 'name' , result_class, branch, student_id, result_semester, subject_name, subject_result, subject_ranking, teacher_id FROM results NATURAL JOIN students WHERE results.teacher_id = ${teacher_id} AND results.result_class = ${classes}`
+        db.execute(queryString, (error, result) => {
+            if (error) {
+                console.log(error.message)
+                next(error)
+                return;
+            }
+            console.log({result})
             res.json({ result })
         })
     },

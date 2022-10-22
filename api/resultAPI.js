@@ -10,6 +10,9 @@ resultapi.get('/branchandclass', resultAction.branchAndClass)
 // get all student list. required branch name and semester number through params. 
 resultapi.get('/all/:branch/:classes', adminAuth, resultAction.resultAll)
 
+// get only specific teacher result
+resultapi.get('/teacher/all/:classes', teacherAuth, resultAction.resultAllTeacher) 
+
 // get all result for one student. required student_id though params.
 resultapi.get('/one/:id', resultAction.resultOneAll )
 
